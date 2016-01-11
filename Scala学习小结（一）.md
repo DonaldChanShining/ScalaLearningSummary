@@ -294,7 +294,7 @@ s.takeRight(4)                      res6:List[Int] = List(3,6,2,123)
 ```
 从运行结果中可以一目了然的知道函数的功能。如果我们能够熟悉这些操作，活用这些操作，可以使我们处理业务时对数据的处理轻松许多。
 此外，List的不可变特性也体现了出来，每个函数都是针对于最开始定义的s，然后返回一个新的列表，而不改变s的值（这样做的效率问题我们以后讨论）。
-下面我们用一个fp in scala中提到的N-Queens的问题结束这节:在一个正方形中，每一行每一列只能有一个Queen存在，求摆放的Queende 解决方案。
+下面我们用一个fp in scala中提到的N-Queens的问题结束这节:在一个正方形中，每一行每一列只能有一个Queen存在，求摆放的Queen的解决方案。
 ```scala
 def queens(n:Int) : Set[List[Int]] = {
   def placeQueens(k:Int) :Set[List[Int]] = {
@@ -404,7 +404,14 @@ def sum(list:List[Int]):Int = {
   if(list == Nil) 0
   else list.head + sum(list.tail)
 }
-//尾递归之？
+//尾递归方式
+def sum(list:List[Int]):Int = {
+  def s(sum:Int,list:List[Int]) : Int= {
+    if(list == Nil) sum
+    else s(sum+list.head,list.tail)
+  }
+  s(0,list)
+}
 ```
 我们也可以更优雅的转化为模式匹配：
 ```scala
@@ -412,7 +419,14 @@ def sum(list:List[Int]):Int = list match{
   case Nil => 0
   case head :: tail => head + sum(tail) 
 }
-//尾递归之
+//尾递归方式
+def sum(list:List[Int]):Int = {
+  def s(sum:Int,list:List[Int]) : Int= list match{
+    case Nil => sum
+    case head :: tail => s(sum+head,tail)
+  }
+  s(0,list)
+}
 ```
 
 当然，scala集合中已经封装了sum方法，直接调用Sum即可获得结果，所以直接调用即可求和，此处只是举例，合理利用List的结构可以使我们处理问题时更加便捷。
